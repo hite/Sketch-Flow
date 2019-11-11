@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/BohemianCoding/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
+  "icon": "icon.png",
+  "commands": [
+    {
+      "name": "Sync Slice (iOS)",
+      "identifier": "sketch-flow.getslice_ios-identifier",
+      "script": "./getslice_ios.js"
+    }
+  ],
+  "menu": {
+    "title": "Sketch Flow",
+    "items": [
+      "sketch-flow.getslice_ios-identifier"
+    ]
+  },
+  "identifier": "me.hite.sketch-flow",
+  "homepage": "https://github.com/sketch-flow/",
+  "version": "0.1.1",
+  "description" : "Make Icon Slicing simple!",
+  "authorEmail" : "iamhite@gmail.com",
+  "name" : "Sketch Flow"
+}
