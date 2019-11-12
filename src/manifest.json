@@ -5,6 +5,7 @@
     {
       "name": "Sync Slice (iOS)",
       "identifier": "sketch-flow.getslice_ios-identifier",
+      "shortcut": "ctrl shift -",
       "script": "./getslice_ios.js"
     }
   ],
