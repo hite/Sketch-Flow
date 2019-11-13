@@ -3,16 +3,34 @@
   "icon": "icon.png",
   "commands": [
     {
-      "name": "Sync Slice (iOS)",
+      "name": "Slice for iOS",
       "identifier": "sketch-flow.getslice_ios-identifier",
       "shortcut": "ctrl shift -",
-      "script": "./getslice_ios.js"
+      "script": "./getslice_ios.js",
+      "handler": "sliceIOS"
+    },
+    {
+      "name": "Slice for Android",
+      "identifier": "sketch-flow.getslice_android-identifier",
+      "shortcut": "ctrl shift +",
+      "script": "./getslice_ios.js",
+      "handler": "sliceAndroid"
+    },
+    {
+      "name": "Reset Project Settings",
+      "identifier": "sketch-flow.getslice_reset-identifier",
+      "shortcut": "ctrl shift |",
+      "script": "./getslice_ios.js",
+      "handler": "resetProjectSettings"
     }
   ],
   "menu": {
     "title": "Sketch Flow",
     "items": [
-      "sketch-flow.getslice_ios-identifier"
+      "sketch-flow.getslice_ios-identifier",
+      "sketch-flow.getslice_android-identifier",
+      "-",
+      "sketch-flow.getslice_reset-identifier"
     ]
   },
   "identifier": "me.hite.sketch-flow",

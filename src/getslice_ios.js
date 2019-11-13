@@ -193,7 +193,7 @@ function getPluginRoot(){
     return pluginRoot;              
 }
 
-export default function () {
+export function sliceIOS() {
     UI.message("It's alive 🙌");
     // Settings.setSettingForKey("project-root", '');
     const document = sketch.getSelectedDocument();
@@ -230,4 +230,12 @@ export default function () {
             }
         })
     }
+}
+
+export function sliceAndroid() {
+    log('unimplemented')
+}
+
+export function resetProjectSettings() {
+    Settings.setSettingForKey("project-root", '');
 }
