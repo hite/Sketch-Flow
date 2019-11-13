@@ -2,9 +2,17 @@
 
 ## Installation
 
-- [Download](../../releases/latest/download/sketch-flow.sketchplugin.zip) the latest release of the plugin
+- [Download](https://github.com/hite/Sketch-Flow/releases/download/v0.1.0/sketch-flow.sketchplugin.zip) the latest release of the plugin
 - Un-zip
 - Double-click on sketch-flow.sketchplugin
+
+## Usage
+1. Name your icon with directory, for example `subject/subject_ico_post_bg`.
+2. Use command "`Slice for iOS`" or "`ctrl shift -`"
+3. If it is your first time to use this plugin, you need to input the path of your iOS project Assets.xcassets, for example. `/Users/hite/workspace/xxx/Assets.xcassets/` without `~` in path.
+4. If everything is ok, the 2x3x png files will sit under Assets.xcassets directory with sub directory if it has
+5. String `subject_ico_post_bg` is copied in Pasteboard for to paste into iOS source codes.
+6. Repeat for another icon.
 
 ## Development Guide
 
