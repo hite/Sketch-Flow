@@ -6,10 +6,10 @@ import Settings from "sketch/settings";
 
 function checkProjectRoot(callback) {
     var projectRoot = Settings.settingForKey("project-root");
-    if (!projectRoot) {
+    if (!projectRoot || projectRoot.length == 0) {
         UI.getInputFromUser(
             "The root of your project ,iOS or Android", {
-                initialValue: "~/workspace/yanxuan-ios/NeteaseYanxuan/Assets.xcassets/"
+                initialValue: "/Users/hite/workspace/yanxuan-ios/NeteaseYanxuan/Assets.xcassets/"
             },
             (err, value) => {
                 if (err) {
@@ -44,10 +44,11 @@ function importSliceToProjectFolder(layerNames, tempPath) {
 function _importSliceToProjectFolder(layerName, tempPath) {
     // 只支持一级，如 subject/subject_ok_ico_normal
     var parts = layerName.split('/');
-    var dirPath = '';
+    var dirPath = '',
+        dirName = '';
     var fileName = layerName;
     if (parts.length == 2) {
-        let dirName = parts[0];
+        dirName = parts[0];
         fileName = parts[1];
 
         if (NSFileManager.defaultManager().fileExistsAtPath(tempPath + dirName)) {
@@ -68,6 +69,10 @@ function _importSliceToProjectFolder(layerName, tempPath) {
     }
     // 先生成 .imageset 文件夹
     const imagesetPath =  dirPath + `/${fileName}.imageset/`;
+    if (NSFileManager.defaultManager().fileExistsAtPath(imagesetPath)) {
+        log('Remove old imagesetPath, ' + imagesetPath)
+        NSFileManager.defaultManager().removeItemAtPath_error(imagesetPath, nil)
+    }
     let succ = createDir(imagesetPath)
     if (!succ) {
         UI.message('Create imageset directory fails')
@@ -77,8 +82,6 @@ function _importSliceToProjectFolder(layerName, tempPath) {
     var existed = [];
     [`${fileName}@2x.png`, `${fileName}@3x.png`].forEach((imageName)=>{
         let filePath = dirPath + '/' +  imageName
-        // log(filePath);
-        // log(imagesetPath);
         if (NSFileManager.defaultManager().fileExistsAtPath(filePath)) {
             // 移动到 imagesetPath 目录下
             if (NSFileManager.defaultManager().moveItemAtPath_toPath_error(filePath, imagesetPath + '/' +  imageName, nil)){
@@ -107,7 +110,7 @@ function _importSliceToProjectFolder(layerName, tempPath) {
                 image3x = `{
                     "idiom" : "universal",
                     "filename" : "${name}",
-                    "scale" : "2x"
+                    "scale" : "3x"
                   },`
             }
         })
@@ -136,14 +139,27 @@ function _importSliceToProjectFolder(layerName, tempPath) {
         return
     }
     // 把整个 subject 或者 imageset 目录移动到 projectRoot 下；
-    let sourcePath = dirPath
-    if (sourcePath == tempPath) {
-        // 没有子目录，
-        sourcePath = imagesetPath
-    }
-    var projectRoot = Settings.settingForKey("project-root");// 必须存在
+    let sourcePath, destPath;
 
-    if (NSFileManager.defaultManager().moveItemAtPath_toPath_error(sourcePath, projectRoot, nil)){
+    var projectRoot = Settings.settingForKey("project-root");// 必须存在
+    // 先检查工程里，有没有这个 dirName 存在，不存则整个目录复制，否则只复制 imageset
+    if (NSFileManager.defaultManager().fileExistsAtPath(projectRoot + '/' + dirName)) {
+        // 只复制 imageset
+        sourcePath = imagesetPath
+        destPath = projectRoot + '/' + dirName + `/${fileName}.imageset/`
+        if (NSFileManager.defaultManager().fileExistsAtPath(destPath)) {
+            log('Remove old project imagesetPath, ' + destPath)
+            NSFileManager.defaultManager().removeItemAtPath_error(destPath, nil)
+        }
+    } else {
+        sourcePath = dirPath
+        destPath =  projectRoot + '/' + dirName
+    }
+
+    log(sourcePath)
+    log(destPath)
+    // moveItemAtPath 函数要求目标地址是不存在的
+    if (NSFileManager.defaultManager().moveItemAtPath_toPath_error(sourcePath, destPath, nil)){
         //
         UI.message('导入工程切片成功');
         let pb = NSPasteboard.generalPasteboard();
@@ -179,7 +195,7 @@ function getPluginRoot(){
 
 export default function () {
     UI.message("It's alive 🙌");
-
+    // Settings.setSettingForKey("project-root", '');
     const document = sketch.getSelectedDocument();
     const selectedLayers = document.selectedLayers
     const selectedCount = selectedLayers.length
