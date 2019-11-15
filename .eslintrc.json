@@ -1,20 +1,16 @@
 {
-    "env": {
-      "node": true,
-      "es6": true,
-      "mocha": true
-    },
-    "rules": {
-      "semi": 0
-    },
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "arrowFunctions": true,
-        "binaryLiterals": true,
-        "blockBindings": true,
-        "classes": true
-      }
-    }
+  "extends": "standard",
+  "rules": {
+    "space-before-function-paren": "off",
+    "one-var":"off",
+    "eol-last":"off"
+  },
+  "globals": {
+    "NSFileManager": "readonly",
+    "nil": "readonly",
+    "context": "readonly",
+    "log": "readonly",
+    "NSPasteboard": "readonly",
+    "NSString": "readonly"
   }
+}
