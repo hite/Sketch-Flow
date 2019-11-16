@@ -1,8 +1,11 @@
 {
   "name": "sketch-flow",
   "version": "0.1.1",
-  "description": "Make Icon Slicing simple!",
-  "repository": "https://github.com/hite/Sketch-Flow",
+  "description": "Make Icon Slicing simple for app developers!",
+  "repository" : {
+    "type": "git",
+    "url": "git+https://github.com/hite/Sketch-Flow"
+  },
   "engines": {
     "sketch": ">=49.0"
   },
