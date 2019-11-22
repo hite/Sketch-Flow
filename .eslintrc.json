@@ -3,7 +3,8 @@
   "rules": {
     "space-before-function-paren": "off",
     "one-var":"off",
-    "eol-last":"off"
+    "eol-last":"off",
+    "indent": ["error", 4]
   },
   "globals": {
     "NSFileManager": "readonly",
