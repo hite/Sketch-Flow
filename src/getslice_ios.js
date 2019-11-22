@@ -40,10 +40,12 @@ function importSliceToProjectFolder(layerNames, tempPath) {
     layerNames.forEach(function (name) {
         // 去重
         const composeObj = createTemplateImageSet(name, tempPath)
-        if (!existed.includes(composeObj)) {
+        if (composeObj.length > 0 && !existed.includes(composeObj)) {
             existed.push(composeObj)
         }
     })
+    // log('existed')
+    // log(existed)
     // 此次截图里正在需要的
     for (let i = 0; i < existed.length; i++) {
         var composeParts = existed[i].split(',')
@@ -80,6 +82,8 @@ function createContentJson(imageNames, templateImagesetPath) {
     }
     var image2x = null
     var image3x = null
+    log('createContentJson, imagename')
+    log(imageNames)
     imageNames.forEach((name) => {
         if (name.includes('@2x')) {
             image2x = `{
@@ -176,11 +180,11 @@ function createTemplateImageSet(layerName, tempPath) {
     log(sourceDirPath)
     log(templateImagesetPath)
     //
-    var suffixs = ['.png', '@1x.png']
-    if (/@2x$/.test(layerName)) {
-        suffixs = ['.png']
-    } else if (/@3x$/.test(layerName)) {
-        suffixs = ['@1x.png']
+    var suffixs = ['.png', '@1x.png']// 如 layername = layer;
+    if (/@2x$/.test(layerName)) { // 如 layername = layer@2x;
+        suffixs = ['@2x.png']
+    } else if (/@3x$/.test(layerName)) { // 如 layername = layer@3x;
+        suffixs = ['@3x.png']
     }
 
     // 找到所以同名的图片；
@@ -188,13 +192,15 @@ function createTemplateImageSet(layerName, tempPath) {
     log('filename ' + fileName + ',layerName = ' + layerName)
 
     suffixs.forEach((suffix) => {
-        const oldFileName = layerName + suffix
-        // 实际上是 layer.png, layer@1x.png
+        const oldFileName = fileName + suffix
         const filePath = tempPath + '/' + oldFileName
 
         if (NSFileManager.defaultManager().fileExistsAtPath(filePath)) {
             // 移动到 templateImagesetPath 目录下
-            const newFileName = fileName + (suffix === '.png' ? '@2x.png' : '@3x.png')
+            if (suffix === '.png' || suffix === '@1x.png') { // 如 layername = layer;
+                suffix = (suffix === '.png' ? '@2x.png' : '@3x.png')
+            }
+            const newFileName = fileName + suffix
             const newFilePath = templateImagesetPath + '/' + newFileName
             // 删除旧的 2x3x 图
             if (NSFileManager.defaultManager().fileExistsAtPath(newFilePath)) {
@@ -244,23 +250,23 @@ function tryToMove(sourceDirPath, dirName, fileName) {
                 if (value === 'Yes, override it') {
                     log('Remove old project imagesetPath, ' + destPath)
                     NSFileManager.defaultManager().removeItemAtPath_error(destPath, nil)
-                    log('sourcePath, destPath')
-                    log(sourcePath)
-                    log(destPath)
                     moveToProject(sourcePath, destPath, fileName)
                 } else {
                     log('用户遇到冲突后，放弃覆盖旧的图片')
                 }
             })
+        } else {
+            moveToProject(sourcePath, destPath, fileName)
         }
     } else {
         sourcePath = sourceDirPath
         destPath = projectRoot + '/' + dirName
+        moveToProject(sourcePath, destPath, fileName)
     }
-    moveToProject(sourcePath, destPath, fileName)
 }
 
 function moveToProject(sourcePath, destPath, fileName) {
+    log('sourcePath, destPath')
     log(sourcePath)
     log(destPath)
     // moveItemAtPath 函数要求目标地址是不存在的
@@ -271,6 +277,7 @@ function moveToProject(sourcePath, destPath, fileName) {
         pb.clearContents()
         pb.writeObjects([`@"${fileName}"`])
     } else {
+        UI.message('移动切片到工程失败')
         log('移动切片到工程失败')
     }
 }
@@ -317,7 +324,7 @@ export function sliceIOS() {
                     if (layer.name.includes('@2x')) {
                         scalses = '1'
                     } else if (layer.name.includes('@3x')) {
-                        scalses = '1.5'
+                        scalses = '1'
                     }
                     const options = {
                         scales: scalses,
