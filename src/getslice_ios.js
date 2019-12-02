@@ -4,36 +4,7 @@ import dom from 'sketch/dom'
 import UI from 'sketch/ui'
 import Settings from 'sketch/settings'
 
-function checkProjectRoot(callback) {
-    var projectRoot = Settings.settingForKey('project-root')
-    if (!projectRoot || projectRoot.length === 0) {
-        UI.getInputFromUser(
-            'The root of your project ,iOS or Android', {
-                initialValue: '/Users/hite/workspace/yanxuan-ios/NeteaseYanxuan/Assets.xcassets/'
-            },
-            (err, value) => {
-                if (err) {
-                    // most likely the user canceled the input
-                    callback(null)
-                    return
-                }
-                Settings.setSettingForKey('project-root', value)
-                callback(projectRoot)
-            }
-        )
-    } else {
-        callback(projectRoot)
-    }
-}
-
-function createDir(path) {
-    return NSFileManager.defaultManager().createDirectoryAtPath_withIntermediateDirectories_attributes_error(
-        path,
-        true,
-        nil,
-        nil
-    )
-}
+import * as pluginUtils from './utils'
 
 function importSliceToProjectFolder(layerNames, tempPath) {
     var existed = []
@@ -113,7 +84,7 @@ function createContentJson(imageNames, templateImagesetPath) {
               "author" : "xcode"
             }
           }`
-    const contentsSucc = writeFile({
+    const contentsSucc = pluginUtils.writeFile({
         content: optionContent,
         path: templateImagesetPath,
         fileName: 'Contents.json'
@@ -139,7 +110,7 @@ function createTemplateImageSet(layerName, tempPath) {
         if (NSFileManager.defaultManager().fileExistsAtPath(tempPath + dirName)) {
             //
         } else {
-            const succ = createDir(tempPath + dirName)
+            const succ = pluginUtils.createDir(tempPath + dirName)
             if (!succ) {
                 UI.message('Create module directory fails')
                 return
@@ -170,7 +141,7 @@ function createTemplateImageSet(layerName, tempPath) {
     if (NSFileManager.defaultManager().fileExistsAtPath(templateImagesetPath)) {
         log('old templateImagesetPath have been exsited, ' + templateImagesetPath)
     } else {
-        const succ = createDir(templateImagesetPath)
+        const succ = pluginUtils.createDir(templateImagesetPath)
         if (!succ) {
             UI.message('Create templateImagesetPath directory fails,' + templateImagesetPath)
             return
@@ -230,12 +201,12 @@ function createTemplateImageSet(layerName, tempPath) {
 function tryToMove(sourceDirPath, dirName, fileName) {
     let sourcePath, destPath
 
-    var projectRoot = Settings.settingForKey('project-root') // 必须存在
+    var projectRoot = pluginUtils.getIOSProjectRoot() // 必须存在
     // 先检查工程里，有没有这个 dirName 存在，不存则整个目录复制，否则只复制 imageset
     if (NSFileManager.defaultManager().fileExistsAtPath(projectRoot + '/' + dirName)) {
         // 只复制 imageset
         sourcePath = sourceDirPath + `/${fileName}.imageset/`
-        destPath = projectRoot + '/' + dirName + `/${fileName}.imageset/`
+        destPath = projectRoot + '/' + dirName + `/${(dirName === '' ? '' : (dirName + '_')) + fileName}.imageset/`
 
         if (NSFileManager.defaultManager().fileExistsAtPath(destPath)) {
             // 给用户警告
@@ -282,29 +253,6 @@ function moveToProject(sourcePath, destPath, fileName) {
     }
 }
 
-function writeFile(options) {
-    var content = NSString.stringWithString(options.content),
-        savePathName = []
-
-    NSFileManager.defaultManager().createDirectoryAtPath_withIntermediateDirectories_attributes_error(
-        options.path,
-        true,
-        nil,
-        nil
-    )
-    savePathName.push(options.path, '/', options.fileName)
-    savePathName = savePathName.join('')
-
-    return content.writeToFile_atomically_encoding_error(savePathName, false, 4, null)
-}
-
-function getPluginRoot() {
-    const scriptPath = NSString.stringWithString(context.scriptPath)
-    const pluginRoot = scriptPath
-        .stringByDeletingLastPathComponent()
-    return pluginRoot
-}
-
 export function sliceIOS() {
     UI.message("It's alive 🙌")
     // Settings.setSettingForKey("project-root", '');
@@ -315,10 +263,10 @@ export function sliceIOS() {
     if (selectedCount === 0) {
         UI.alert('Warning', 'No layers are selected.')
     } else {
-        checkProjectRoot((projectRoot) => {
+        pluginUtils.checkIOSProjectRoot((projectRoot) => {
             if (projectRoot) {
                 const layerNames = []
-                const tempPath = getPluginRoot() + '/temp/'
+                const tempPath = pluginUtils.getPluginRoot() + '/temp/'
                 selectedLayers.forEach(function (layer, i) {
                     let scalses = '1,1.5'
                     if (layer.name.includes('@2x')) {
@@ -349,12 +297,4 @@ export function sliceIOS() {
             }
         })
     }
-}
-
-export function sliceAndroid() {
-    log('unimplemented')
-}
-
-export function resetProjectSettings() {
-    Settings.setSettingForKey('project-root', '')
 }
