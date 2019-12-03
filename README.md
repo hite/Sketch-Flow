@@ -2,8 +2,8 @@
 
 ## Installation
 
-- [Download](https://github.com/hite/Sketch-Flow/files/3852228/sketch-flow.sketchplugin.zip) the latest release of the plugin
-- Un-zip
+- Find the latest release of the plugin in [Release Page](https://github.com/hite/Sketch-Flow/releases/) 
+- Download and Un-zip
 - Double-click on sketch-flow.sketchplugin
 
 ## Usage
