@@ -46,7 +46,8 @@ function importSliceToProjectFolder(layerNames, tempPath) {
 
 function tryToMove(sourcePath, dirName, fileName) {
     var projectRoot = pluginUtils.getAndroidProjectRoot() // 必须存在
-    var destPath = projectRoot + '/' + (dirName === '' ? '' : (dirName + '_')) + fileName + '.png'
+    var newFileName = (dirName === '' ? '' : (dirName + '_')) + fileName
+    var destPath = projectRoot + '/' + newFileName + '.png'
     // 先检查工程里，有没有这个 dirName 存在，不存则整个目录复制，否则只复制 imageset
     if (NSFileManager.defaultManager().fileExistsAtPath(destPath)) {
         // 给用户警告
@@ -61,13 +62,13 @@ function tryToMove(sourcePath, dirName, fileName) {
             if (value === 'Yes, override it') {
                 log('Remove old project imagesetPath, ' + destPath)
                 NSFileManager.defaultManager().removeItemAtPath_error(destPath, nil)
-                moveToProject(sourcePath, destPath, fileName)
+                moveToProject(sourcePath, destPath, newFileName)
             } else {
                 log('用户遇到冲突后，放弃覆盖旧的图片' + destPath)
             }
         })
     } else {
-        moveToProject(sourcePath, destPath, fileName)
+        moveToProject(sourcePath, destPath, newFileName)
     }
 }
 
@@ -75,7 +76,7 @@ function moveToProject(sourcePath, destPath, fileName) {
     pluginUtils.moveToProject(sourcePath, destPath, function (dest) {
         const pb = NSPasteboard.generalPasteboard()
         pb.clearContents()
-        pb.writeObjects([fileName])
+        pb.writeObjects([`@mipmap/${fileName}`])
     })
 }
 

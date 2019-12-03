@@ -10,13 +10,13 @@ function importSliceToProjectFolder(layerNames, tempPath) {
     layerNames.forEach(function (name) {
         // 去重
         const composeObj = createTemplateImageSet(name, tempPath)
-        if (composeObj.length > 0 && !existed.includes(composeObj)) {
+        if (composeObj && composeObj.length > 0 && !existed.includes(composeObj)) {
             existed.push(composeObj)
         }
     })
     // log('existed')
     // log(existed)
-    // 此次截图里正在需要的
+    // 此次截图生成的 2x3x 图
     for (let i = 0; i < existed.length; i++) {
         var composeParts = existed[i].split(',')
         var fileName = composeParts[1]
@@ -131,12 +131,14 @@ function createTemplateImageSet(layerName, tempPath) {
     sourceDirPath = tempPath + dirName
     // 把文件名如 subject_ok_ico_normal@2x
     const fileNameParts = fileName.split('@')
-
     if (fileNameParts.length === 2) {
         fileName = fileNameParts[0]
     }
+    log('filename ' + fileName + ',layerName = ' + layerName)
+    // imageset 的名字用新名字（加目录之后的名字），里面图片的名字用新名字；
+    const newFileName = (dirName === '' ? '' : (dirName + '_')) + fileName
     // 先生成 .imageset 文件夹
-    const templateImagesetPath = sourceDirPath + `/${fileName}.imageset/`
+    const templateImagesetPath = sourceDirPath + `/${newFileName}.imageset/`
     if (NSFileManager.defaultManager().fileExistsAtPath(templateImagesetPath)) {
         log('old templateImagesetPath have been exsited, ' + templateImagesetPath)
     } else {
@@ -147,42 +149,40 @@ function createTemplateImageSet(layerName, tempPath) {
         }
     }
 
-    log(sourceDirPath)
+    log('临时目录下生成的 ImagesetPath；')
     log(templateImagesetPath)
     //
-    var suffixs = ['.png', '@1x.png'] // 如 layername = layer;
+    var exportedSuffixs = ['.png', '@1x.png'] // 如 layername = layer;
     if (/@2x$/.test(layerName)) { // 如 layername = layer@2x;
-        suffixs = ['@2x.png']
+        exportedSuffixs = ['@2x.png']
     } else if (/@3x$/.test(layerName)) { // 如 layername = layer@3x;
-        suffixs = ['@3x.png']
+        exportedSuffixs = ['@3x.png']
     }
-
     // 找到所以同名的图片；
     var existed = []
-    log('filename ' + fileName + ',layerName = ' + layerName)
 
-    suffixs.forEach((suffix) => {
-        const oldFileName = fileName + suffix
-        const filePath = sourceDirPath + '/' + oldFileName
-
+    exportedSuffixs.forEach((exportedSuffix) => {
+        const oldFileName = fileName + exportedSuffix
+        const filePath = tempPath + '/' + oldFileName
+        log('exported filepath ' + filePath)
         if (NSFileManager.defaultManager().fileExistsAtPath(filePath)) {
             // 移动到 templateImagesetPath 目录下
-            if (suffix === '.png' || suffix === '@1x.png') { // 如 layername = layer;
-                suffix = (suffix === '.png' ? '@2x.png' : '@3x.png')
+            var newSuffix = exportedSuffix
+            if (exportedSuffix === '.png' || exportedSuffix === '@1x.png') { // 如 layername = layer;
+                newSuffix = (exportedSuffix === '.png' ? '@2x.png' : '@3x.png')
             }
-            const newFileName = fileName + suffix
-            const newFilePath = templateImagesetPath + '/' + newFileName
+            const newFilePath = templateImagesetPath + '/' + newFileName + newSuffix
             // 删除旧的 2x3x 图
             if (NSFileManager.defaultManager().fileExistsAtPath(newFilePath)) {
                 //
-                log('删除旧2x3x 图' + newFileName)
+                log('删除旧2x3x 图：' + newFileName)
                 NSFileManager.defaultManager().removeItemAtPath_error(newFilePath, nil)
             }
             if (NSFileManager.defaultManager().moveItemAtPath_toPath_error(filePath, newFilePath, nil)) {
                 //
                 existed.push(newFileName)
             } else {
-                log('移动图片失败' + oldFileName)
+                log('移动图片失败：' + oldFileName)
             }
         } else {
             log(filePath + ' 不存在')
@@ -194,7 +194,7 @@ function createTemplateImageSet(layerName, tempPath) {
         return
     }
 
-    return dirName + ',' + fileName
+    return dirName + ',' + newFileName
 }
 
 function tryToMove(sourceDirPath, dirName, fileName) {
@@ -205,11 +205,11 @@ function tryToMove(sourceDirPath, dirName, fileName) {
     if (NSFileManager.defaultManager().fileExistsAtPath(projectRoot + '/' + dirName)) {
         // 只复制 imageset
         sourcePath = sourceDirPath + `/${fileName}.imageset/`
-        destPath = projectRoot + '/' + dirName + `/${(dirName === '' ? '' : (dirName + '_')) + fileName}.imageset/`
+        destPath = projectRoot + '/' + dirName + `/${fileName}.imageset/`
 
         if (NSFileManager.defaultManager().fileExistsAtPath(destPath)) {
             // 给用户警告
-            UI.getInputFromUser("Has same '" + `/${fileName}.imageset/` + "', should override old directory?", {
+            UI.getInputFromUser("Has same name '" + `/${fileName}.imageset/` + "', should override old directory?", {
                 type: UI.INPUT_TYPE.selection,
                 possibleValues: ['Yes, override it', 'Abort']
             }, (err, value) => {
@@ -244,8 +244,6 @@ function moveToProject(sourcePath, destPath, fileName) {
 }
 
 export function sliceIOS() {
-    UI.message("It's alive 🙌")
-    // Settings.setSettingForKey("project-root", '');
     const document = sketch.getSelectedDocument()
     const selectedLayers = document.selectedLayers
     const selectedCount = selectedLayers.length
