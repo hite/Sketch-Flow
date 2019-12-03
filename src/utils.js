@@ -4,13 +4,13 @@ import UI from 'sketch/ui'
 import Settings from 'sketch/settings'
 
 const kProjectRootForIOSKey = 'kProjectRootForIOSKey'
-const kProjectRootForAndroidKey = 'kProjectRootForIOSKey'
+const kProjectRootForAndroidKey = 'kProjectRootForAndroidKey'
 
 function checkProjectRoot(key, callback) {
     var projectRoot = Settings.settingForKey(key)
     if (!projectRoot || projectRoot.length === 0) {
         UI.getInputFromUser(
-            `The root of your ${key === kProjectRootForIOSKey ? 'iOS' : 'Android'} project`, {
+            `The images directory of your ${key === kProjectRootForIOSKey ? 'iOS' : 'Android'} project`, {
                 initialValue: key === kProjectRootForIOSKey ? '/Users/userName/App/Assets.xcassets/' : '/Users/userName/App/res/mipmap-xxhdpi'
             },
             (err, value) => {
@@ -68,6 +68,22 @@ export function getPluginRoot() {
     const pluginRoot = scriptPath
         .stringByDeletingLastPathComponent()
     return pluginRoot
+}
+export function moveToProject(sourcePath, destPath, onsuccess) {
+    log('sourcePath, destPath')
+    log(sourcePath)
+    log(destPath)
+    // moveItemAtPath 函数要求目标地址是不存在的
+    if (NSFileManager.defaultManager().moveItemAtPath_toPath_error(sourcePath, destPath, nil)) {
+        //
+        UI.message('导入工程切片成功，保存路径：' + destPath)
+        if (typeof onsuccess === 'function') {
+            onsuccess(destPath)
+        }
+    } else {
+        UI.message('移动切片到工程失败')
+        log('移动切片到工程失败')
+    }
 }
 
 function checkIOSProjectRoot(callback) {

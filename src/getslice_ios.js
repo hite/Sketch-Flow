@@ -2,7 +2,6 @@ import sketch from 'sketch'
 // documentation: https://developer.sketchapp.com/reference/api/
 import dom from 'sketch/dom'
 import UI from 'sketch/ui'
-import Settings from 'sketch/settings'
 
 import * as pluginUtils from './utils'
 
@@ -151,7 +150,7 @@ function createTemplateImageSet(layerName, tempPath) {
     log(sourceDirPath)
     log(templateImagesetPath)
     //
-    var suffixs = ['.png', '@1x.png']// 如 layername = layer;
+    var suffixs = ['.png', '@1x.png'] // 如 layername = layer;
     if (/@2x$/.test(layerName)) { // 如 layername = layer@2x;
         suffixs = ['@2x.png']
     } else if (/@3x$/.test(layerName)) { // 如 layername = layer@3x;
@@ -164,7 +163,7 @@ function createTemplateImageSet(layerName, tempPath) {
 
     suffixs.forEach((suffix) => {
         const oldFileName = fileName + suffix
-        const filePath = tempPath + '/' + oldFileName
+        const filePath = sourceDirPath + '/' + oldFileName
 
         if (NSFileManager.defaultManager().fileExistsAtPath(filePath)) {
             // 移动到 templateImagesetPath 目录下
@@ -237,20 +236,11 @@ function tryToMove(sourceDirPath, dirName, fileName) {
 }
 
 function moveToProject(sourcePath, destPath, fileName) {
-    log('sourcePath, destPath')
-    log(sourcePath)
-    log(destPath)
-    // moveItemAtPath 函数要求目标地址是不存在的
-    if (NSFileManager.defaultManager().moveItemAtPath_toPath_error(sourcePath, destPath, nil)) {
-        //
-        UI.message('导入工程切片成功')
+    pluginUtils.moveToProject(sourcePath, destPath, function (dest) {
         const pb = NSPasteboard.generalPasteboard()
         pb.clearContents()
         pb.writeObjects([`@"${fileName}"`])
-    } else {
-        UI.message('移动切片到工程失败')
-        log('移动切片到工程失败')
-    }
+    })
 }
 
 export function sliceIOS() {
