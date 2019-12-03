@@ -22,6 +22,12 @@
       "shortcut": "ctrl cmd r",
       "script": "./utils.js",
       "handler": "resetProjectSettings"
+    },{
+      "name": "Create a icon template",
+      "identifier": "sketch-flow.create_icon_template-identifier",
+      "shortcut": "ctrl cmd -",
+      "script": "./iconTemplate.js",
+      "handler": "importArtBoard"
     }
   ],
   "menu": {
@@ -30,12 +36,14 @@
       "sketch-flow.getslice_ios-identifier",
       "sketch-flow.getslice_android-identifier",
       "-",
-      "sketch-flow.getslice_reset-identifier"
+      "sketch-flow.getslice_reset-identifier",
+      "-",
+      "sketch-flow.create_icon_template-identifier"
     ]
   },
   "identifier": "me.hite.sketch-flow",
   "homepage": "https://github.com/hite/Sketch-Flow",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description" : "Make Icon Slicing simple for app developers!",
   "authorEmail" : "iamhite@gmail.com",
   "name" : "Sketch Flow"
