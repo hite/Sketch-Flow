@@ -7,11 +7,11 @@
 - Double-click on sketch-flow.sketchplugin
 
 ## Usage
-1. Name your icon with directory, for example `subject/subject_ico_post_bg` or name your artboard to `subject`, and name your icon `subject_ico_post_bg`.![name a icon](https://github.com/hite/Sketch-Flow/blob/master/step1.png)
-2. Select icon layer, and use command "`Slice for iOS`" or "`ctrl shift -`"
+1. Name your artboard to `subject`, and name your icon `subject_ico_post_bg`.![name a icon](https://github.com/hite/Sketch-Flow/blob/master/step1.png)
+2. Select icon layer, and use command "`Slice for iOS`" or "`ctrl shift s`"
 3. If it is your first time to use this plugin, you need to input the path of your iOS project Assets.xcassets, for example. `/Users/hite/workspace/xxx/Assets.xcassets/` without `~` in path.
 4. If everything is ok, the 2x3x png files will sit under Assets.xcassets directory with sub directory if it has.![slice icon done](https://github.com/hite/Sketch-Flow/blob/master/step2.png)
-5. String `subject_ico_post_bg` is copied into Pasteboard for you paste it into iOS source codes.
+5. String `subject_subject_ico_post_bg` is copied into Pasteboard for you paste it into iOS source codes.
 6. Repeat for another icon.
 
 ## Development Guide
