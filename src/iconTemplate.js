@@ -2,137 +2,136 @@
 import dom from 'sketch/dom'
 import UI from 'sketch/ui'
 
-const kTemplateNames = [
-    {
+const kTemplateNames = [{
         template: '位置',
-        desc: '放置一些公共的图标'
+        desc: '一些公共的图标'
     },
 
     {
         name: 'nav',
-        desc: '放置所有导航栏'
+        desc: '所有导航栏'
     },
     {
         name: 'tab',
-        desc: '放置一些底栏相关的图标'
+        desc: '一些底栏相关的图标'
     },
     {
         template: '频道',
-        desc: '放置一些频道或页面的图标'
+        desc: '一些频道或页面的图标'
     },
 
     {
         name: 'homepage',
-        desc: '放置一些首页相关的图标'
+        desc: '一些首页相关的图标'
     },
     {
         name: 'category',
-        desc: '放置一些分类相关的图标'
+        desc: '一些分类相关的图标'
     },
     {
         name: 'topic',
-        desc: '放置值得买相关的图标'
+        desc: '值得买相关的图标'
     },
     {
         name: 'cart',
-        desc: '放置购物车相关的图标'
+        desc: '购物车相关的图标'
     },
     {
         name: 'profile',
-        desc: '放置个人相关的图标'
+        desc: '个人相关的图标'
     },
     {
         name: 'login',
-        desc: '放置登录页相关的图标'
+        desc: '登录页相关的图标'
     },
     {
         name: 'splash',
-        desc: '放置启动页相关的图标'
+        desc: '启动页相关的图标'
     },
     {
         name: 'detail',
-        desc: '放置详情页相关的图标'
+        desc: '详情页相关的图标'
     },
     {
         name: 'order',
-        desc: '放置组单页相关的图标'
+        desc: '组单页相关的图标'
     },
     {
         name: 'comment',
-        desc: '放置评论相关的图标'
+        desc: '评论相关的图标'
     },
     {
         name: 'aftersale',
-        desc: '放置售后相关的图标'
+        desc: '售后相关的图标'
     },
     {
         name: 'pay',
-        desc: '放置支付页相关的图标'
+        desc: '支付页相关的图标'
     },
     {
         name: 'messages',
-        desc: '放置消息中心相关的图标'
+        desc: '消息中心相关的图标'
     },
     {
         name: 'member',
-        desc: '放置会员相关的图标'
+        desc: '会员相关的图标'
     },
     {
         name: 'supermember',
-        desc: '放置超级会员相关的图标'
+        desc: '超级会员相关的图标'
     },
     {
         template: '功能',
-        desc: '放置一些功能性图标'
+        desc: '一些功能性图标'
     },
     {
         name: 'share',
-        desc: '放置分享相关图标'
+        desc: '分享相关图标'
     },
     {
         name: 'video',
-        desc: '放置视频相关的图标'
+        desc: '视频相关的图标'
     },
     {
         name: 'coupon',
-        desc: '放置优惠券相关的图标'
+        desc: '优惠券相关的图标'
     },
     {
         name: '3dtouch',
-        desc: '放置3dtouch相关的图标'
+        desc: '3dtouch相关的图标'
     },
     {
         name: 'empty',
-        desc: '放置页面为空相关图标'
+        desc: '页面为空相关图标'
     },
     {
         name: 'loading',
-        desc: '放置下拉刷新相关图标'
+        desc: '下拉刷新相关图标'
     },
     {
         name: 'loading',
-        desc: '放置下拉刷新相关图标'
+        desc: '下拉刷新相关图标'
     },
     {
         template: '组件',
-        desc: '放置一些组件图标'
+        desc: '一些组件图标'
     },
     {
         name: 'button',
-        desc: '放置按钮相关图标'
+        desc: '按钮相关图标'
     },
     {
         name: 'dropmenu',
-        desc: '放置下拉菜单的图标'
+        desc: '下拉菜单的图标'
     },
     {
         name: 'floatwindow',
-        desc: '放置悬浮窗相关的图标'
+        desc: '悬浮窗相关的图标'
     },
     {
         name: 'checkbox',
-        desc: '放置勾选框相关图标'
-    },
+        desc: '勾选框相关图标'
+    }
 ]
 
 export function importArtBoard() {
@@ -177,5 +176,17 @@ export function importArtBoard() {
             frame: newFrame
         })
         ab1.parent = page
+        // https://github.com/turbobabr/Sketch-Plugins-Cookbook
+        //  The following example centers viewport by x:200,y:200 point:
+
+        // var canvasView = context.document.contentDrawView(); // Getting canvas view
+        // canvasView.centerRect_animated(CGRectMake(200,200,1,1),true);
+        // The example below shows how to center on the first selected layer using the same method without animation:
+
+        // var layer = context.selection.firstObject()
+        // if(layer) {
+        //     var view = context.document.contentDrawView();
+        //     view.centerRect_animated(layer.absoluteRect().rect(),false);
+        // }
     })
 }
