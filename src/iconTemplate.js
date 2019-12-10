@@ -163,7 +163,8 @@ export function importArtBoard() {
             var sketch = require('sketch/dom')
             var artboardObj = sketch.fromNative(artboard)
             var frame = artboardObj.frame
-            newFrame = new dom.Rectangle(frame.x + frame.width + 20, frame.y, 200, 400)
+            // 在上面
+            newFrame = new dom.Rectangle(frame.x, frame.y - 500, frame.width, 400)
         }
         var templateName = value
         var nameParts = value.split(' - ')
@@ -182,11 +183,12 @@ export function importArtBoard() {
         // var canvasView = context.document.contentDrawView(); // Getting canvas view
         // canvasView.centerRect_animated(CGRectMake(200,200,1,1),true);
         // The example below shows how to center on the first selected layer using the same method without animation:
-
-        // var layer = context.selection.firstObject()
-        // if(layer) {
-        //     var view = context.document.contentDrawView();
-        //     view.centerRect_animated(layer.absoluteRect().rect(),false);
+        // if (artboard === null) {
+        //     var layer = context.selection.firstObject()
+        //     if (layer) {
+        //         var view = context.document.contentDrawView()
+        //         view.centerRect_animated(layer.absoluteRect().rect(), false)
+        //     }
         // }
     })
 }

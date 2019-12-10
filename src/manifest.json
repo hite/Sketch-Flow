@@ -43,7 +43,7 @@
   },
   "identifier": "me.hite.sketch-flow",
   "homepage": "https://github.com/hite/Sketch-Flow",
-  "version": "2.2.0",
+  "version": "2.2.3",
   "description" : "Make Icon Slicing simple for app developers!",
   "authorEmail" : "iamhite@gmail.com",
   "name" : "Sketch Flow"
