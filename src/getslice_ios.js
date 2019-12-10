@@ -243,6 +243,29 @@ function moveToProject(sourcePath, destPath, fileName) {
     })
 }
 
+export function copyTextCode() {
+    const document = sketch.getSelectedDocument()
+    const selectedLayers = document.selectedLayers
+    var selectedCount = selectedLayers.length
+
+    if (selectedCount === 0) {
+        UI.message('No layers are selected.')
+        return
+    }
+    var layer = selectedLayers.layers[0]
+
+    if (layer.type === 'Text' && layer.sharedStyle && layer.sharedStyle.name) {
+        const text = layer.name
+        const styleNameParts = layer.sharedStyle.name.split('/')
+        const code = '<#label#>.text = @"' + text + '";\n' + `YXSpec(<#label#>, YXCode_${styleNameParts.pop()});`
+        const pb = NSPasteboard.generalPasteboard()
+        pb.clearContents()
+        pb.writeObjects([code])
+
+        UI.message('Code is copied')
+    }
+}
+
 export function sliceIOS() {
     const document = sketch.getSelectedDocument()
     const selectedLayers = document.selectedLayers

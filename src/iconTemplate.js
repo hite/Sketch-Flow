@@ -2,7 +2,8 @@
 import dom from 'sketch/dom'
 import UI from 'sketch/ui'
 
-const kTemplateNames = [{
+const kTemplateNames = [
+    {
         template: '位置',
         desc: '一些公共的图标'
     },

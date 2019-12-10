@@ -80,6 +80,10 @@ function moveToProject(sourcePath, destPath, fileName) {
     })
 }
 
+export function copyTextCode() {
+    UI.message('unimplenmented')
+}
+
 export function sliceAndroid() {
     const document = sketch.getSelectedDocument()
     const selectedLayers = document.selectedLayers
