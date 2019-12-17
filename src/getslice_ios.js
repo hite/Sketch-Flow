@@ -239,7 +239,7 @@ function moveToProject(sourcePath, destPath, fileName) {
     pluginUtils.moveToProject(sourcePath, destPath, function (dest) {
         const pb = NSPasteboard.generalPasteboard()
         pb.clearContents()
-        pb.writeObjects([`@"${fileName}"`])
+        pb.writeObjects([`[UIImage imageNamed:@"${fileName}"]`])
     })
 }
 
@@ -255,14 +255,13 @@ export function copyTextCode() {
     var layer = selectedLayers.layers[0]
 
     if (layer.type === 'Text' && layer.sharedStyle && layer.sharedStyle.name) {
-        const text = layer.name
         const styleNameParts = layer.sharedStyle.name.split('/')
-        const code = '<#label#>.text = @"' + text + '";\n' + `YXSpec(<#label#>, YXCode_${styleNameParts.pop()});`
+        const code = `YXCode_${styleNameParts.pop()}`
         const pb = NSPasteboard.generalPasteboard()
         pb.clearContents()
         pb.writeObjects([code])
 
-        UI.message('Code is copied')
+        UI.message('Text code is copied')
     }
 }
 

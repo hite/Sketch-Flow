@@ -5,14 +5,14 @@
     {
       "name": "Slice for iOS",
       "identifier": "sketch-flow.getslice_ios-identifier",
-      "shortcut": "ctrl cmd s",
+      "shortcut": "ctrl s",
       "script": "./getslice_ios.js",
       "handler": "sliceIOS"
     },
     {
       "name": "Slice for Android",
       "identifier": "sketch-flow.getslice_android-identifier",
-      "shortcut": "ctrl cmd a",
+      "shortcut": "ctrl a",
       "script": "./getslice_android.js",
       "handler": "sliceAndroid"
     },
@@ -61,7 +61,7 @@
   },
   "identifier": "me.hite.sketch-flow",
   "homepage": "https://github.com/hite/Sketch-Flow",
-  "version": "2.2.4",
+  "version": "2.2.7",
   "description" : "Make icon slicing simple for app developers!",
   "authorEmail" : "iamhite@gmail.com",
   "name" : "Sketch Flow"
