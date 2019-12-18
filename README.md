@@ -6,6 +6,10 @@
 - Download and Un-zip
 - Double-click on sketch-flow.sketchplugin
 
+## Features
+1. one-click slicing icon into project.
+2. copy code snippet with text style.
+
 ## Usage
 1. Name your artboard to `subject`, and name your icon `subject_ico_post_bg`.![name a icon](https://github.com/hite/Sketch-Flow/blob/master/step1.png)
 2. Select icon layer, and use command "`Slice for iOS`" or "`ctrl shift s`"
