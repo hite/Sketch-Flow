@@ -74,14 +74,41 @@ function tryToMove(sourcePath, dirName, fileName) {
 
 function moveToProject(sourcePath, destPath, fileName) {
     pluginUtils.moveToProject(sourcePath, destPath, function (dest) {
-        const pb = NSPasteboard.generalPasteboard()
-        pb.clearContents()
-        pb.writeObjects([`@mipmap/${fileName}`])
+        const sample = pluginUtils.getAndroidIconNameTemplate()
+        if (sample.length > 0) {
+            const pb = NSPasteboard.generalPasteboard()
+            pb.clearContents()
+            pb.writeObjects([sample.replace('$iconName', fileName)])
+        } else {
+            log('getAndroidIconNameTemplate fail')
+        }
     })
 }
 
 export function copyTextCode() {
-    UI.message('unimplenmented')
+    const document = sketch.getSelectedDocument()
+    const selectedLayers = document.selectedLayers
+    var selectedCount = selectedLayers.length
+
+    if (selectedCount === 0) {
+        UI.message('No layers are selected.')
+        return
+    }
+    var layer = selectedLayers.layers[0]
+
+    if (layer.type === 'Text' && layer.sharedStyle && layer.sharedStyle.name) {
+        const sample = pluginUtils.getAndroidCodeTemplate()
+        if (sample.length > 0) {
+            const styleNameParts = layer.sharedStyle.name.split('/')
+            const code = styleNameParts.pop()
+            const pb = NSPasteboard.generalPasteboard()
+            pb.clearContents()
+            pb.writeObjects([sample.replace('$codeName', code)])
+            UI.message('Text code is copied')
+        } else {
+            log('getAndroidCodeTemplate fail')
+        }
+    }
 }
 
 export function sliceAndroid() {

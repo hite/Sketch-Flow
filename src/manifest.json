@@ -5,7 +5,7 @@
     {
       "name": "Slice for iOS",
       "identifier": "sketch-flow.getslice_ios-identifier",
-      "shortcut": "ctrl s",
+      "shortcut": "ctrl cmd s",
       "script": "./getslice_ios.js",
       "handler": "sliceIOS"
     },
@@ -17,25 +17,24 @@
       "handler": "sliceAndroid"
     },
     {
-      "name": "Text Code for iOS",
+      "name": "Text code snippet for iOS",
       "identifier": "sketch-flow.textCode_ios-identifier",
       "shortcut": "ctrl cmd w",
       "script": "./getslice_ios.js",
       "handler": "copyTextCode"
     },
     {
-      "name": "Text Code for Android",
+      "name": "Text code snippet for Android",
       "identifier": "sketch-flow.textCode_android-identifier",
       "shortcut": "ctrl cmd e",
       "script": "./getslice_android.js",
       "handler": "copyTextCode"
     },
     {
-      "name": "Reset Project Settings",
-      "identifier": "sketch-flow.getslice_reset-identifier",
-      "shortcut": "ctrl cmd r",
+      "name": "Configure plugins",
+      "identifier": "sketch-flow.configure-identifier",
       "script": "./utils.js",
-      "handler": "resetProjectSettings"
+      "handler": "showConfigs"
     },
     {
       "name": "Create a icon template",
@@ -54,14 +53,14 @@
       "sketch-flow.textCode_ios-identifier",
       "sketch-flow.textCode_android-identifier",
       "-",
-      "sketch-flow.getslice_reset-identifier",
+      "sketch-flow.configure-identifier",
       "-",
       "sketch-flow.create_icon_template-identifier"
     ]
   },
   "identifier": "me.hite.sketch-flow",
   "homepage": "https://github.com/hite/Sketch-Flow",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "description" : "Make icon slicing simple for app developers!",
   "authorEmail" : "iamhite@gmail.com",
   "name" : "Sketch Flow"

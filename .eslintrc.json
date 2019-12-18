@@ -12,6 +12,11 @@
     "context": "readonly",
     "log": "readonly",
     "NSPasteboard": "readonly",
-    "NSString": "readonly"
+    "NSString": "readonly",
+    "COSAlertWindow": "readonly",
+    "NSTextField": "readonly",
+    "NSView": "readonly",
+    "NSTextView": "readonly",
+    "NSMakeRect": "readonly"
   }
 }

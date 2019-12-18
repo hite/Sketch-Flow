@@ -237,9 +237,14 @@ function tryToMove(sourceDirPath, dirName, fileName) {
 
 function moveToProject(sourcePath, destPath, fileName) {
     pluginUtils.moveToProject(sourcePath, destPath, function (dest) {
-        const pb = NSPasteboard.generalPasteboard()
-        pb.clearContents()
-        pb.writeObjects([`[UIImage imageNamed:@"${fileName}"]`])
+        const sample = pluginUtils.getIOSIconNameTemplate()
+        if (sample.length > 0) {
+            const pb = NSPasteboard.generalPasteboard()
+            pb.clearContents()
+            pb.writeObjects([sample.replace('$iconName', fileName)])
+        } else {
+            log('getIOSIconNameTemplate fail')
+        }
     })
 }
 
@@ -255,13 +260,17 @@ export function copyTextCode() {
     var layer = selectedLayers.layers[0]
 
     if (layer.type === 'Text' && layer.sharedStyle && layer.sharedStyle.name) {
-        const styleNameParts = layer.sharedStyle.name.split('/')
-        const code = `YXCode_${styleNameParts.pop()}`
-        const pb = NSPasteboard.generalPasteboard()
-        pb.clearContents()
-        pb.writeObjects([code])
-
-        UI.message('Text code is copied')
+        const sample = pluginUtils.getIOSCodeTemplate()
+        if (sample.length > 0) {
+            const styleNameParts = layer.sharedStyle.name.split('/')
+            const code = styleNameParts.pop()
+            const pb = NSPasteboard.generalPasteboard()
+            pb.clearContents()
+            pb.writeObjects([sample.replace('$codeName', code)])
+            UI.message('Text code is copied')
+        } else {
+            log('getIOSCodeTemplate fail')
+        }
     }
 }
 
