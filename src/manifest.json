@@ -42,6 +42,12 @@
       "shortcut": "ctrl cmd -",
       "script": "./iconTemplate.js",
       "handler": "importArtBoard"
+    },
+    {
+      "name": "Export icon for all devices",
+      "identifier": "sketch-flow.export_icon_forall-identifier",
+      "script": "./exportIcons.js",
+      "handler": "exportIcons"
     }
   ],
   "menu": {
@@ -55,13 +61,14 @@
       "-",
       "sketch-flow.configure-identifier",
       "-",
-      "sketch-flow.create_icon_template-identifier"
+      "sketch-flow.create_icon_template-identifier",
+      "sketch-flow.export_icon_forall-identifier"
     ]
   },
   "identifier": "me.hite.sketch-flow",
   "homepage": "https://github.com/hite/Sketch-Flow",
-  "version": "2.3.0",
-  "description" : "Make icon slicing simple for app developers!",
-  "authorEmail" : "iamhite@gmail.com",
-  "name" : "Sketch Flow"
+  "version": "2.4.0",
+  "description": "Make icon slicing simple for app developers!",
+  "authorEmail": "iamhite@gmail.com",
+  "name": "Sketch Flow"
 }
