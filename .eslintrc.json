@@ -2,8 +2,8 @@
   "extends": "standard",
   "rules": {
     "space-before-function-paren": "off",
-    "one-var":"off",
-    "eol-last":"off",
+    "one-var": "off",
+    "eol-last": "off",
     "indent": ["error", 4]
   },
   "globals": {
@@ -17,6 +17,8 @@
     "NSTextField": "readonly",
     "NSView": "readonly",
     "NSTextView": "readonly",
+    "NSDocumentController": "readonly",
+    "MSApplicationMetadata": "readonly",
     "NSMakeRect": "readonly"
   }
 }
