@@ -71,6 +71,9 @@ const kIOSIconNames = [{
 
 // 其他直角
 const kOtherRect = [{
+    name: '512x512',
+    size: 512
+}, {
     name: '256x256',
     size: 256
 }, {
