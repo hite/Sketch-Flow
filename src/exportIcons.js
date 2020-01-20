@@ -140,6 +140,7 @@ function doExportIcons(layer, scale, tempPath, fileName) {
         formats: 'png',
         output: tempPath
     }
+    options['save-for-web'] = true
     // log(options)
 
     dom.export(layer, options)

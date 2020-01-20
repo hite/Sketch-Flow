@@ -12,12 +12,20 @@
 3. one-click export all app icons (including iOS/android/others) against on 1024*1024-sizing artboard
 
 ## Usage
+### How to slice icon ?
 1. Name your artboard to `subject`, and name your icon `subject_ico_post_bg`.![name a icon](https://github.com/hite/Sketch-Flow/blob/master/step1.png)
 2. Select icon layer, and use command "`Slice for iOS`" or "`ctrl shift s`"
 3. If it is your first time to use this plugin, you need to input the path of your iOS project Assets.xcassets, for example. `/Users/hite/workspace/xxx/Assets.xcassets/` without `~` in path.
-4. If everything is ok, the 2x3x png files will sit under Assets.xcassets directory with sub directory if it has.![slice icon done](https://github.com/hite/Sketch-Flow/blob/master/step2.png)
+4. If everything is right, the 2x3x png files will sit under Assets.xcassets directory with sub directory if it has.![slice icon done](https://github.com/hite/Sketch-Flow/blob/master/step2.png)
 5. String `subject_subject_ico_post_bg` is copied into Pasteboard for you paste it into iOS source codes.
 6. Repeat for another icon.
+  
+### How to export app icons for all device?
+1. Create a Artboard, and name it.![name artboard](https://github.com/hite/Sketch-Flow/blob/master/how-to-use-export_appicon.png)
+2. Make sure this artboard contains only one child of layer or image bitmap.
+3. Select this layer
+4. use command "`Export icon for all devices`" 
+5. Wait for seconds, All icons sit under `~/Documents/Sketch Exports/[your artbaord name]` if everything is right.
 
 ## Development Guide
 
