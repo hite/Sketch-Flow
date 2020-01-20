@@ -23,8 +23,8 @@
 ### How to export app icons for all device?
 1. Create a Artboard, and name it.![name artboard](https://github.com/hite/Sketch-Flow/blob/master/how-to-use-export_appicon.png)
 2. Make sure this artboard contains only one child of layer or image bitmap.
-3. Select this layer
-4. use command "`Export icon for all devices`" 
+3. Select this artboard
+4. Use command "`Export icon for all devices`" 
 5. Wait for seconds, All icons sit under `~/Documents/Sketch Exports/[your artbaord name]` if everything is right.
 
 ## Development Guide
