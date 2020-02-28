@@ -15,7 +15,6 @@ function importSliceToProjectFolder(layerNames, tempPath) {
         }
     })
     // log('existed')
-    // log(existed)
     // 此次截图生成的 2x3x 图
     for (let i = 0; i < existed.length; i++) {
         var composeParts = existed[i].split(',')

@@ -11,24 +11,45 @@ const kIOSCodeTemplateKey = 'kIOSCodeTemplateKey'
 const kAndroidCodeTemplateKey = 'kAndroidCodeTemplateKey'
 
 function checkProjectRoot(key, callback) {
-    var projectRoot = Settings.settingForKey(key)
-    if (!projectRoot || projectRoot.length === 0) {
-        UI.getInputFromUser(
-            `The images directory of your ${key === kProjectRootForIOSKey ? 'iOS' : 'Android'} project`, {
-                initialValue: key === kProjectRootForIOSKey ? '/Users/userName/App/Assets.xcassets/' : '/Users/userName/App/res/mipmap-xxhdpi'
-            },
-            (err, value) => {
-                if (err) {
-                    // most likely the user canceled the input
-                    callback(null)
-                    return
-                }
-                Settings.setSettingForKey(key, value)
-                callback(projectRoot)
-            }
-        )
+    var path = Settings.settingForKey(key)
+    if (!path || path.length === 0) {
+        showConfigs()
     } else {
-        callback(projectRoot)
+        if (path === null || path === '') {
+            callback(null)
+            return
+        }
+        // 说明是工程的真实目录，需要必须存在
+        var isIOS = (key === kProjectRootForIOSKey)
+
+        if (isIOS && path.indexOf('/Assets.xcassets') > -1) {
+            if (!NSFileManager.defaultManager().fileExistsAtPath(path)) {
+                log('iOS 的工程路径不存在，' + path)
+                UI.alert('Warning', '"' + path + '" does not exsit.')
+                path = null
+            }
+        } else if (!isIOS && path.indexOf('/res/mipmap-xxhdpi') > -1) {
+            if (!NSFileManager.defaultManager().fileExistsAtPath(path)) {
+                UI.alert('Warning', '"' + path + '" doesn`t exsit.')
+                log('Android 的工程路径不存在，' + path)
+                path = null
+            }
+        } else {
+            // 如果不存在，帮助自动创建一个
+            if (!NSFileManager.defaultManager().fileExistsAtPath(path)) {
+                const succ = createDir(path)
+                if (!succ) {
+                    UI.message('Create project root fails')
+                    path = null
+                } else {
+                    log('自动创建目录：' + path)
+                    // 同时保持到配置里
+                    Settings.setSettingForKey(kProjectRootForIOSKey, path)
+                }
+            }
+        }
+
+        callback(path)
     }
 }
 
@@ -103,8 +124,7 @@ function createLabel(title, x, y, width, height) {
 
 export function getIOSIconNameTemplate() {
     var iOSIconNamePattern = Settings.settingForKey(kIOSIconTemplateKey)
-    log('iOSIconNamePattern')
-    log(iOSIconNamePattern)
+    log('iOSIconNamePattern : ' + iOSIconNamePattern)
     return iOSIconNamePattern || 'YXSpecImage($iconName)'
 }
 
@@ -150,7 +170,7 @@ export function showConfigs() {
 
     var horizontalTextField = NSTextView.alloc().initWithFrame(NSMakeRect(0, availableHeight - sectionIndex * sectionHeight + sectionLabelHeight, elementWidth, sectionTextFieldHeight))
     var iosRootPath = Settings.settingForKey(kProjectRootForIOSKey)
-    horizontalTextField.setString(iosRootPath || 'e.g /Users/userName/App/Assets.xcassets/')
+    horizontalTextField.setString(iosRootPath || 'e.g /Users/userName/YourApp/Assets.xcassets/')
     horizontalTextField.setVerticallyResizable(false)
     view.addSubview(horizontalTextField)
 
@@ -161,7 +181,7 @@ export function showConfigs() {
 
     var androidPathField = NSTextView.alloc().initWithFrame(NSMakeRect(0, availableHeight - sectionIndex * sectionHeight + sectionLabelHeight, elementWidth, sectionTextFieldHeight))
     var androidRootPath = Settings.settingForKey(kProjectRootForAndroidKey)
-    androidPathField.setString(androidRootPath || 'e.g /Users/userName/App/res/mipmap-xxhdpi')
+    androidPathField.setString(androidRootPath || 'e.g /Users/userName/YourApp/res/mipmap-xxhdpi')
     androidPathField.setVerticallyResizable(false)
     horizontalTextField.setNextKeyView(androidPathField)
 
