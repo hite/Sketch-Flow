@@ -94,6 +94,9 @@ const kOtherRect = [{
 }, {
     name: '90x90',
     size: 90
+}, {
+    name: '16x16',
+    size: 16
 }]
 
 // 其他圆角

@@ -54,6 +54,7 @@ function checkProjectRoot(key, callback) {
 }
 
 export function createDir(path) {
+    // 创建一个目录
     return NSFileManager.defaultManager().createDirectoryAtPath_withIntermediateDirectories_attributes_error(
         path,
         true,
