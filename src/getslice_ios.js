@@ -47,6 +47,7 @@ function importSliceToProjectFolder(layerNames, tempPath) {
 
 function createContentJson(imageNames, templateImagesetPath) {
     if (imageNames.length === 0) {
+        log('createContentJson, imageNames is null')
         return false
     }
     var image2x = null
@@ -208,22 +209,37 @@ function tryToMove(sourceDirPath, dirName, fileName) {
 
         if (NSFileManager.defaultManager().fileExistsAtPath(destPath)) {
             // 给用户警告
-            UI.getInputFromUser("Has same name '" + `/${fileName}.imageset/` + "', should override old directory?", {
-                type: UI.INPUT_TYPE.selection,
-                possibleValues: ['Yes, override it', 'Abort']
-            }, (err, value) => {
-                if (err) {
-                    // most likely the user canceled the input
-                    return
-                }
-                if (value === 'Yes, override it') {
-                    log('Remove old project imagesetPath, ' + destPath)
-                    NSFileManager.defaultManager().removeItemAtPath_error(destPath, nil)
-                    moveToProject(sourcePath, destPath, fileName)
-                } else {
-                    log('用户遇到冲突后，放弃覆盖旧的图片')
-                }
-            })
+            // UI.getInputFromUser 在 54.1 版本上一直返回 cancel input，换成 mac 的弹窗
+            var alert = COSAlertWindow.new()
+            alert.setMessageText('Warning')
+            alert.addButtonWithTitle('Override')
+            alert.addButtonWithTitle('Abort')
+
+            // Create the main view
+            var viewWidth = 520
+            var viewHeight = 60
+            var minusSomeWidth = 100 // 因为 alert window 上左侧 sketch 的 log 占去了一些位置。所以要去掉
+            var elementWidth = viewWidth - minusSomeWidth
+            var availableHeight = viewHeight - 12 // 30 是顶部 title 占的位置，而且很奇怪的是，它的顺序是从下到上的？？？？
+            //
+            var sectionLabelHeight = 40
+
+            var view = NSView.alloc().initWithFrame(NSMakeRect(0, 0, viewWidth, viewHeight))
+            alert.addAccessoryView(view)
+
+            // 设置 iOS 的 配置；
+            var infoLabel = createLabel("The '" + `/${fileName}.imageset/` + "' directory exists, \n should override?", 0, availableHeight - 28, elementWidth, sectionLabelHeight)
+            view.addSubview(infoLabel)
+
+            var response = alert.runModal()
+            log(response)
+            if (response === 1000) {
+                log('Remove old project imagesetPath, ' + destPath)
+                NSFileManager.defaultManager().removeItemAtPath_error(destPath, nil)
+                moveToProject(sourcePath, destPath, fileName)
+            } else {
+                log('用户遇到冲突后，放弃覆盖旧的图片')
+            }
         } else {
             moveToProject(sourcePath, destPath, fileName)
         }
@@ -232,6 +248,17 @@ function tryToMove(sourceDirPath, dirName, fileName) {
         destPath = projectRoot + '/' + dirName
         moveToProject(sourcePath, destPath, fileName)
     }
+}
+
+function createLabel(title, x, y, width, height) {
+    var infoLabel = NSTextField.alloc().initWithFrame(NSMakeRect(x, y, width, height))
+
+    infoLabel.setSelectable(false)
+    infoLabel.setEditable(false)
+    infoLabel.setBezeled(false)
+    infoLabel.setDrawsBackground(false)
+    infoLabel.setStringValue(title)
+    return infoLabel
 }
 
 function moveToProject(sourcePath, destPath, fileName) {
